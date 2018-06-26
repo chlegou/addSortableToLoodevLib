@@ -5,46 +5,445 @@
 	<meta charset="utf-8">
 	<title></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css">
 	<link rel="stylesheet" href="jquery-multiselect.css">
+
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="jquery-multiselect.js"></script>
+	<script src="html5sortable.js"></script>
+
 
 	<style>
 		.bg-yellow {
 			background-color: #efe0ba;
 		}
+
+
+		.btn-icon.btn-xs {
+			width: 16px;
+			height: 16px;
+			font-size: 8px;
+			line-height: 13px;
+		}
 	</style>
 </head>
 
 <body>
-	<select multiple="multiple" id="my-select" name="my-select[]">
-		<option value='elem_1'>elem 1</option>
-		<option value='elem_2'>elem 2</option>
-		<option value='elem_3'>elem 3</option>
-		<option value='elem_4'>elem 4</option>
-		<option value='elem_100'>elem 100</option>
+	<p style="margin: 20px">
+		<strong>Introduction:</strong>
+		<br/> i have modified the original lib, by adding many options will give you the right to customise the way it works.
+		<br/> i basically, added many options, see it here:
+		<br/>
+		<code>hasDeselector: true,</code> // add a deselector button
+		<br/>
+		<code>deselectFromDeselectorOnly: false,</code> // valid only is it has Deselector set to true. it makes deselecting works only when clicking in button
+		<br/>
+		<code>customDeselector: htmlCode ,</code> // should receive a html code, for deselector button.
+		<strong>NO &lt;div> should be used, car it's inserted inside &lt;span> element</strong>
+		<br/>
+		<code>hasDragHandler: true,</code> // add a drag button to the left
+		<br/>
+		<code>dragHandlerClass: 'selected-li-drag-handler',</code> // add a class, that should be related to handle option of the sortable plugin
+		<br/>
+		<code>customDragHandler: htmlCode,</code> // should receive a html code, for deselector button.
+		<strong>NO &lt;div> should be used, car it's inserted inside &lt;span> element</strong>
+		<br/>
+		<code>hasSelector: true,</code> // add a selector button
+		<br/>
+		<code>selectFromSelectorOnly: true,</code> // valid only is it has Selector set to true. it makes selecting works only when clicking in button
+		<br/>
+		<code>customSelector: htmlCode,</code>// should receive a html code, for deselector button.
+		<strong>NO &lt;div> should be used, car it's inserted inside &lt;span> element</strong>
+		<br/>
+	</p>
 
-	</select>
 
+	<p style="margin: 20px">
+		<strong>#Example 1:</strong>
+		default lib as Loodev made, with adding sortable. no custom options, will make is work as default.
+	</p>
 
+	<div class="container" style="max-width: 100%">
+		<div class="row">
+			<div class="col-4">
+				<select multiple="multiple" id="my-select-1" name="my-select[]">
+						<option value='elem_1' selected>elem 1</option>
+						<option value='elem_2'>elem 2</option>
+						<option value='elem_3' selected>elem 3</option>
+						<option value='elem_4'>elem 4</option>
+						<option value='elem_100' selected>elem 100</option>
 
-	<script src="jquery-multiselect.js"></script>
-	<script src="html5sortable.js"></script>
+				</select>
+			</div>
+			<div class="col-8">
+				<code style="white-space:pre-wrap">
+		$('#my-select-1').multiSelect({
+			afterInit: function (container) {
+				container.find('.ms-selection > .ms-list').addClass('sortable');
+		
+				// must follow the element 
+				sortable('#ms-my-select-1 .ms-selection > .ms-list.sortable', {
+					forcePlaceholderSize: true,
+					placeholderClass: 'bg-yellow',
+					// handle: '.selected-li-drag-handler', // target the `dragHandlerClass` option value, if not set, all the item will be draggable 
+				});
+			}
+		});						
+						</code>
+			</div>
+		</div>
+	</div>
 
 	<script type="text/javascript">
-		$('#my-select').multiSelect({
+		$('#my-select-1').multiSelect({
 			afterInit: function (container) {
 				container.find('.ms-selection > .ms-list').addClass('sortable');
 
-				sortable('.sortable', {
+				// must follow the element 
+				sortable('#ms-my-select-1 .ms-selection > .ms-list.sortable', {
 					forcePlaceholderSize: true,
 					placeholderClass: 'bg-yellow',
-					handle: '.js-inner-handle',
+					// handle: '.selected-li-drag-handler', // target the `dragHandlerClass` option value, if not set, all the item will be draggable 
 				});
 			}
 		});
 
 
 	</script>
+
+
+
+
+
+
+
+	<p style="margin: 20px">
+		<strong>#Example 2:</strong>
+		adding sortable dragger, items will be dragged only from that dragger.
+		<strong>`handle` option in sortable, is what make dragging from there only!!</strong>
+	</p>
+
+	<div class="container" style="max-width: 100%">
+		<div class="row">
+			<div class="col-4">
+				<select multiple="multiple" id="my-select-2" name="my-select[]">
+						<option value='elem_1' selected>elem 1</option>
+						<option value='elem_2'>elem 2</option>
+						<option value='elem_3' selected>elem 3</option>
+						<option value='elem_4'>elem 4</option>
+						<option value='elem_100' selected>elem 100</option>
+
+				</select>
+			</div>
+			<div class="col-8">
+				<code style="white-space:pre-wrap">
+$('#my-select-2').multiSelect({
+	hasDragHandler: true,
+	dragHandlerClass: 'drag-handler',
+
+	afterInit: function (container) {
+		container.find('.ms-selection > .ms-list').addClass('sortable');
+		// must follow the element 
+		sortable('#ms-my-select-2 .ms-selection > .ms-list.sortable', {
+			forcePlaceholderSize: true,
+			placeholderClass: 'bg-yellow',
+			handle: '.drag-handler', // target the `dragHandlerClass` option value, if not set, all the item will be draggable 
+		});
+	}
+});				
+						</code>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$('#my-select-2').multiSelect({
+			hasDragHandler: true,
+			dragHandlerClass: 'drag-handler',
+
+			afterInit: function (container) {
+				container.find('.ms-selection > .ms-list').addClass('sortable');
+				// must follow the element 
+				sortable('#ms-my-select-2 .ms-selection > .ms-list.sortable', {
+					forcePlaceholderSize: true,
+					placeholderClass: 'bg-yellow',
+					handle: '.drag-handler', // target the `dragHandlerClass` option value, if not set, all the item will be draggable 
+				});
+			}
+		});
+
+
+	</script>
+
+
+
+
+
+
+
+
+
+
+
+
+	<p style="margin: 20px">
+		<strong>#Example 3:</strong>
+		adding sortable dragger, selectable button, deselectable button.
+	</p>
+
+	<div class="container" style="max-width: 100%">
+		<div class="row">
+			<div class="col-4">
+				<select multiple="multiple" id="my-select-3" name="my-select[]">
+						<option value='elem_1' selected>elem 1</option>
+						<option value='elem_2'>elem 2</option>
+						<option value='elem_3' selected>elem 3</option>
+						<option value='elem_4'>elem 4</option>
+						<option value='elem_100' selected>elem 100</option>
+
+				</select>
+			</div>
+			<div class="col-8">
+				<code style="white-space:pre-wrap">
+$('#my-select-3').multiSelect({
+	hasDeselector: true,
+	// valid only is it has Deselector set to true
+	deselectFromDeselectorOnly: false,
+	hasDragHandler: true,
+	dragHandlerClass: 'drag-handler',
+	hasSelector: true,
+	// valid only is it has Selector  set to true
+	selectFromSelectorOnly: false,
+	
+
+	afterInit: function (container) {
+		container.find('.ms-selection > .ms-list').addClass('sortable');
+		// must follow the element 
+		sortable('#ms-my-select-3 .ms-selection > .ms-list.sortable', {
+			forcePlaceholderSize: true,
+			placeholderClass: 'bg-yellow',
+		});
+	}
+});
+							
+						</code>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$('#my-select-3').multiSelect({
+			hasDeselector: true,
+			// valid only is it has Deselector set to true
+			deselectFromDeselectorOnly: false,
+			hasDragHandler: true,
+			dragHandlerClass: 'drag-handler',
+			hasSelector: true,
+			// valid only is it has Selector  set to true
+			selectFromSelectorOnly: false,
+
+
+			afterInit: function (container) {
+				container.find('.ms-selection > .ms-list').addClass('sortable');
+				// must follow the element 
+				sortable('#ms-my-select-3 .ms-selection > .ms-list.sortable', {
+					forcePlaceholderSize: true,
+					placeholderClass: 'bg-yellow',
+				});
+			}
+		});
+
+
+	</script>
+
+
+
+
+
+
+
+
+
+
+	<p style="margin: 20px">
+		<strong>#Example 4:</strong>
+		customise action buttons. any html code can be used, but only in &lt;span> tag. in this example, i used bootstrap and fontawesome.
+	</p>
+
+	<div class="container" style="max-width: 100%">
+		<div class="row">
+			<div class="col-4">
+				<select multiple="multiple" id="my-select-4" name="my-select[]">
+					<option value='elem_1' selected>elem 1</option>
+					<option value='elem_2'>elem 2</option>
+					<option value='elem_3' selected>elem 3</option>
+					<option value='elem_4'>elem 4</option>
+					<option value='elem_100' selected>elem 100</option>
+
+				</select>
+			</div>
+			<div class="col-8">
+				<code style="white-space:pre-wrap">
+$('#my-select-4').multiSelect({
+	hasDeselector: true,
+	// valid only is it has Deselector set to true
+	deselectFromDeselectorOnly: false,
+	customDeselector: '&lt;span style="padding: 0px 5px;">&lt;a class="btn btn-danger btn-icon btn-circle btn-xs text-white " style="padding:0px">&lt;i class="fas fa-minus ">&lt;/i>&lt;/a>&lt;/span>',
+	hasDragHandler: true,
+	dragHandlerClass: 'selected-li-drag-handler',
+	customDragHandler: '&lt;span style="padding: 0px 5px 0px 0px;">&lt;a class="btn btn-primary btn-icon btn-circle btn-xs text-white " style="padding:0px">&lt;i class="fas fa-sort fa-2x ">&lt;/i>&lt;/a>&lt;/span>',
+	hasSelector: true,
+	// valid only is it has Selector  set to true
+	selectFromSelectorOnly: false,
+	customSelector: '&lt;span style="padding: 0px 5px;">&lt;a class="btn btn-success btn-icon btn-circle btn-xs text-white " style="padding:0px">&lt;i class="fas fa-plus ">&lt;/i>&lt;/a>&lt;/span>',
+
+	
+
+	afterInit: function (container) {
+		container.find('.ms-selection > .ms-list').addClass('sortable');
+		// must follow the element 
+		sortable('#ms-my-select-4 .ms-selection > .ms-list.sortable', {
+			forcePlaceholderSize: true,
+			placeholderClass: 'bg-yellow',
+		});
+	}
+});
+							
+						</code>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$('#my-select-4').multiSelect({
+			hasDeselector: true,
+			// valid only is it has Deselector set to true
+			deselectFromDeselectorOnly: false,
+			customDeselector: '<span style="padding: 0px 5px;"><a class="btn btn-danger btn-icon btn-circle btn-xs text-white " style="padding:0px"><i class="fas fa-minus "></i></a></span>',
+			hasDragHandler: true,
+			dragHandlerClass: 'selected-li-drag-handler',
+			customDragHandler: '<span style="padding: 0px 5px 0px 0px;"><a class="btn btn-primary btn-icon btn-circle btn-xs text-white " style="padding:0px"><i class="fas fa-sort fa-2x "></i></a></span>',
+			hasSelector: true,
+			// valid only is it has Selector  set to true
+			selectFromSelectorOnly: false,
+			customSelector: '<span style="padding: 0px 5px;"><a class="btn btn-success btn-icon btn-circle btn-xs text-white " style="padding:0px"><i class="fas fa-plus "></i></a></span>',
+
+
+
+			afterInit: function (container) {
+				container.find('.ms-selection > .ms-list').addClass('sortable');
+				// must follow the element 
+				sortable('#ms-my-select-4 .ms-selection > .ms-list.sortable', {
+					forcePlaceholderSize: true,
+					placeholderClass: 'bg-yellow',
+				});
+			}
+		});
+
+
+	</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<p style="margin: 20px">
+		<strong>#Example 5:</strong>
+		make selecting, deselecting, works from buttons only!
+		<br/>
+		<strong>NOTE:</strong> sorting from the button only is related to sorltable plugin,
+		<strong>see #Example 3</strong>.
+
+	</p>
+
+	<div class="container" style="max-width: 100%">
+		<div class="row">
+			<div class="col-4">
+				<select multiple="multiple" id="my-select-5" name="my-select[]">
+					<option value='elem_1' selected>elem 1</option>
+					<option value='elem_2'>elem 2</option>
+					<option value='elem_3' selected>elem 3</option>
+					<option value='elem_4'>elem 4</option>
+					<option value='elem_100' selected>elem 100</option>
+
+				</select>
+			</div>
+			<div class="col-8">
+				<code style="white-space:pre-wrap">
+$('#my-select-5').multiSelect({
+	hasDeselector: true,
+	// valid only is it has Deselector set to true
+	deselectFromDeselectorOnly: true,
+	customDeselector: '&lt;span style="padding: 0px 5px;">&lt;a class="btn btn-danger btn-icon btn-circle btn-xs text-white " style="padding:0px">&lt;i class="fas fa-minus ">&lt;/i>&lt;/a>&lt;/span>',
+	hasDragHandler: true,
+	dragHandlerClass: 'selected-li-drag-handler',
+	customDragHandler: '&lt;span style="padding: 0px 5px 0px 0px;">&lt;a class="btn btn-primary btn-icon btn-circle btn-xs text-white " style="padding:0px">&lt;i class="fas fa-sort fa-2x ">&lt;/i>&lt;/a>&lt;/span>',
+	hasSelector: true,
+	// valid only is it has Selector  set to true
+	selectFromSelectorOnly: true,
+	customSelector: '&lt;span style="padding: 0px 5px;">&lt;a class="btn btn-success btn-icon btn-circle btn-xs text-white " style="padding:0px">&lt;i class="fas fa-plus ">&lt;/i>&lt;/a>&lt;/span>',
+
+
+
+	afterInit: function (container) {
+		container.find('.ms-selection > .ms-list').addClass('sortable');
+		// must follow the element 
+		sortable('#ms-my-select-5 .ms-selection > .ms-list.sortable', {
+			forcePlaceholderSize: true,
+			placeholderClass: 'bg-yellow',
+		});
+	}
+});
+							
+						</code>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$('#my-select-5').multiSelect({
+			hasDeselector: true,
+			// valid only is it has Deselector set to true
+			deselectFromDeselectorOnly: true,
+			customDeselector: '<span style="padding: 0px 5px;"><a class="btn btn-danger btn-icon btn-circle btn-xs text-white " style="padding:0px"><i class="fas fa-minus "></i></a></span>',
+			hasDragHandler: true,
+			dragHandlerClass: 'selected-li-drag-handler',
+			customDragHandler: '<span style="padding: 0px 5px 0px 0px;"><a class="btn btn-primary btn-icon btn-circle btn-xs text-white " style="padding:0px"><i class="fas fa-sort fa-2x "></i></a></span>',
+			hasSelector: true,
+			// valid only is it has Selector  set to true
+			selectFromSelectorOnly: true,
+			customSelector: '<span style="padding: 0px 5px;"><a class="btn btn-success btn-icon btn-circle btn-xs text-white " style="padding:0px"><i class="fas fa-plus "></i></a></span>',
+
+
+
+			afterInit: function (container) {
+				container.find('.ms-selection > .ms-list').addClass('sortable');
+				// must follow the element 
+				sortable('#ms-my-select-5 .ms-selection > .ms-list.sortable', {
+					forcePlaceholderSize: true,
+					placeholderClass: 'bg-yellow',
+				});
+			}
+		});
+
+
+	</script>
+
+
+
+
 
 
 </body>
