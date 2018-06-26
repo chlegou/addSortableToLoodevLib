@@ -80,18 +80,18 @@
 			</div>
 			<div class="col-8">
 				<code style="white-space:pre-wrap">
-		$('#my-select-1').multiSelect({
-			afterInit: function (container) {
-				container.find('.ms-selection > .ms-list').addClass('sortable');
-		
-				// must follow the element 
-				sortable('#ms-my-select-1 .ms-selection > .ms-list.sortable', {
-					forcePlaceholderSize: true,
-					placeholderClass: 'bg-yellow',
-					// handle: '.selected-li-drag-handler', // target the `dragHandlerClass` option value, if not set, all the item will be draggable 
-				});
-			}
-		});						
+$('#my-select-1').multiSelect({
+	afterInit: function (container) {
+		container.find('.ms-selection > .ms-list').addClass('sortable');
+
+		// must follow the element 
+		sortable('#ms-my-select-1 .ms-selection > .ms-list.sortable', {
+			forcePlaceholderSize: true,
+			placeholderClass: 'bg-yellow',
+			// handle: '.selected-li-drag-handler', // target the `dragHandlerClass` option value, if not set, all the item will be draggable 
+		});
+	}
+});						
 						</code>
 			</div>
 		</div>
